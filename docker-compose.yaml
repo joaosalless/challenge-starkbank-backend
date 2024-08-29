@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app-base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+  api:
+    extends:
+      service: app-base
+    ports:
+      - "8080:8080"
+    command: ["/app/bin/api"]
+
+  cron:
+    extends:
+      service: app-base
+    command: ["/app/bin/api"]
