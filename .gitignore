@@ -9,6 +9,7 @@ gen
 *.dylib
 *.test
 *.out
+*.pem
 go.work
 bin/
 .env

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"joaosalless/challenge-starkbank/bootstrap"
-	"joaosalless/challenge-starkbank/src/http"
+	"joaosalless/challenge-starkbank/cmd"
+	"joaosalless/challenge-starkbank/src/api/http"
 	"log"
 )
 
 func main() {
-	container := bootstrap.Initialize()
+	container := cmd.Initialize()
 
 	err := container.Invoke(http.NewServer)
 	if err != nil {

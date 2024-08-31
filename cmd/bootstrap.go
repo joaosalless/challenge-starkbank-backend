@@ -1,12 +1,15 @@
-package bootstrap
+package cmd
 
 import (
 	"go.uber.org/dig"
 	"joaosalless/challenge-starkbank/config"
+	"joaosalless/challenge-starkbank/pkg/clock"
 	"joaosalless/challenge-starkbank/pkg/logging"
+	"joaosalless/challenge-starkbank/src/api/http/handlers"
 	"joaosalless/challenge-starkbank/src/controllers"
-	"joaosalless/challenge-starkbank/src/http/handlers"
+	"joaosalless/challenge-starkbank/src/gateways/bank"
 	"joaosalless/challenge-starkbank/src/interfaces"
+	"joaosalless/challenge-starkbank/src/schedule"
 	"joaosalless/challenge-starkbank/src/services"
 	"log"
 )
@@ -29,9 +32,19 @@ func Initialize() *dig.Container {
 
 	deps := []Dependency{
 		{
+			Constructor: clock.NewClock,
+			Interface:   new(interfaces.Clock),
+			Name:        "Clock",
+		},
+		{
 			Constructor: logging.NewLogger,
 			Interface:   new(interfaces.Logger),
 			Name:        "Logger",
+		},
+		{
+			Constructor: bank.NewBankGateway,
+			Interface:   new(interfaces.BankGateway),
+			Name:        "BankGateway",
 		},
 		{
 			Constructor: services.NewInvoiceService,
@@ -52,6 +65,16 @@ func Initialize() *dig.Container {
 			Constructor: handlers.NewInvoiceHandler,
 			Interface:   new(interfaces.InvoiceHandler),
 			Name:        "InvoiceHandler",
+		},
+		{
+			Constructor: schedule.NewInvoiceCreateScheduledTask,
+			Interface:   new(interfaces.ScheduledTask),
+			Name:        "InvoiceCreateScheduledTask",
+		},
+		{
+			Constructor: schedule.NewScheduledTasks,
+			Interface:   new(interfaces.ScheduledTasks),
+			Name:        "ScheduledTasks",
 		},
 	}
 

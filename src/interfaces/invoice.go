@@ -8,7 +8,7 @@ import (
 
 type InvoiceHandler interface {
 	CreateInvoice(ctx *gin.Context)
-	InvoiceHookProcess(ctx *gin.Context)
+	HookProcessInvoice(ctx *gin.Context)
 }
 
 type InvoiceController interface {

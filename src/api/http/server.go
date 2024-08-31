@@ -2,8 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.uber.org/dig"
-	"joaosalless/challenge-starkbank/config"
+	"joaosalless/challenge-starkbank/pkg/app"
 	"joaosalless/challenge-starkbank/src/interfaces"
 )
 
@@ -12,25 +11,24 @@ type Server struct {
 }
 
 type ServerDependencies struct {
-	dig.In
-	Cfg            *config.Config            `name:"Config"`
+	app.Dependencies
 	InvoiceHandler interfaces.InvoiceHandler `name:"InvoiceHandler"`
 }
 
 func NewServer(deps ServerDependencies) *Server {
-	app := &Server{
+	api := &Server{
 		invoiceHandler: deps.InvoiceHandler,
 	}
 
 	r := gin.Default()
 
 	v1 := r.Group("v1")
-	v1.POST("/invoices", app.invoiceHandler.CreateInvoice)
-	v1.POST("/hooks/invoices", app.invoiceHandler.InvoiceHookProcess)
+	v1.POST("/invoices", api.invoiceHandler.CreateInvoice)
+	v1.POST("/hooks/invoices", api.invoiceHandler.HookProcessInvoice)
 
-	if err := r.Run(":" + deps.Cfg.AppPort); err != nil {
+	if err := r.Run(":" + deps.Cfg.Api.Port); err != nil {
 		panic(err)
 	}
 
-	return app
+	return api
 }

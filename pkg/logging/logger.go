@@ -4,17 +4,21 @@ import (
 	"go.uber.org/dig"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"joaosalless/challenge-starkbank/config"
+	"joaosalless/challenge-starkbank/src/interfaces"
 )
 
 type Logger struct {
 	sugaredLogger *zap.SugaredLogger
 }
 
-type LoggerDependencies struct {
+type Dependencies struct {
 	dig.In
+	Cfg   *config.Config   `name:"Config"`
+	Clock interfaces.Clock `name:"Clock"`
 }
 
-func NewLogger(deps LoggerDependencies) *Logger {
+func NewLogger(deps Dependencies) *Logger {
 	zapConfig := zap.NewProductionConfig()
 
 	zapConfig.EncoderConfig.TimeKey = "timestamp"

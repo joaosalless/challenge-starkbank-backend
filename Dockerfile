@@ -10,7 +10,7 @@ RUN go mod download
 COPY . .
 
 RUN go build -o /app/bin/api ./cmd/api/main.go
-RUN go build -o /app/bin/cron ./cmd/cron/main.go
+RUN go build -o /app/bin/schedule ./cmd/schedule/main.go
 
 FROM alpine:latest
 
@@ -19,7 +19,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /app
 
 COPY --from=builder /app/bin/api /app/bin/api
-COPY --from=builder /app/bin/cron /app/bin/cron
+COPY --from=builder /app/bin/schedule /app/bin/schedule
 
 ARG DB_HOST
 ARG DB_USER

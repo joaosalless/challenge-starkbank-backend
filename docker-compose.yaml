@@ -11,10 +11,9 @@ services:
     extends:
       service: app-base
     ports:
-      - "8080:8080"
+      - "${API_PORT:-8080}:8080"
     command: ["/app/bin/api"]
-
-  cron:
+  schedule:
     extends:
       service: app-base
-    command: ["/app/bin/api"]
+    command: ["/app/bin/schedule"]
