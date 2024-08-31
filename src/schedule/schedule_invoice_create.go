@@ -1,10 +1,13 @@
 package schedule
 
 import (
+	"context"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/mvrilo/go-cpf"
 	"joaosalless/challenge-starkbank/pkg/app"
 	"joaosalless/challenge-starkbank/src/domain"
+	"joaosalless/challenge-starkbank/src/dtos"
 	"joaosalless/challenge-starkbank/src/interfaces"
 	"time"
 )
@@ -49,17 +52,17 @@ func (ic *InvoiceCreateScheduledTask) Run() (err error) {
 			Due:        &due,
 			Expiration: 1,
 			Name:       fmt.Sprintf("%s %s", gofakeit.Person().FirstName, gofakeit.Person().LastName),
-			TaxId:      gofakeit.Person().SSN,
+			TaxId:      cpf.GeneratePretty(),
 		})
 	}
 
 	ic.logger.Infow("finished InvoiceCreateScheduledTask", "invoices", invoices)
 
-	//_, err = ic.invoiceController.CreateInvoice(context.Background(), dtos.CreateInvoiceInput{Data: invoices})
-	//if err != nil {
-	//	ic.logger.Errorw("error creating invoices", "error", err)
-	//	return err
-	//}
+	_, err = ic.invoiceController.CreateInvoice(context.Background(), dtos.CreateInvoiceInput{Data: invoices})
+	if err != nil {
+		ic.logger.Errorw("error creating invoices", "error", err)
+		return err
+	}
 
 	return nil
 }
