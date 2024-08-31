@@ -19,7 +19,7 @@ type ScheduledTasksDependencies struct {
 }
 
 func NewScheduledTasks(deps ScheduledTasksDependencies) *ScheduledTasks {
-	if !deps.Cfg.Scheduler.Enabled {
+	if !deps.Config.Scheduler.Enabled {
 		deps.Logger.Infow("Scheduler is disabled")
 		return &ScheduledTasks{}
 	}

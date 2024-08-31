@@ -26,7 +26,7 @@ type InvoiceCreateScheduledTaskDependencies struct {
 func NewInvoiceCreateScheduledTask(deps InvoiceCreateScheduledTaskDependencies) *InvoiceCreateScheduledTask {
 	return &InvoiceCreateScheduledTask{
 		logger:            deps.Logger,
-		scheduledTime:     deps.Cfg.Scheduler.InvoiceCreateScheduledTime,
+		scheduledTime:     deps.Config.Scheduler.InvoiceCreateScheduledTime,
 		invoiceController: deps.InvoiceController,
 	}
 }

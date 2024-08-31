@@ -8,7 +8,7 @@ import (
 
 type Dependencies struct {
 	dig.In
-	Cfg    *config.Config    `name:"Config"`
+	Config *config.Config    `name:"Config"`
 	Clock  interfaces.Clock  `name:"Clock"`
 	Logger interfaces.Logger `name:"Logger"`
 }

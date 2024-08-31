@@ -12,13 +12,13 @@ type Clock struct {
 
 type Dependencies struct {
 	dig.In
-	Cfg *config.Config `name:"Config"`
+	Config *config.Config `name:"Config"`
 }
 
 var location *time.Location
 
 func NewClock(deps Dependencies) *Clock {
-	location, _ = time.LoadLocation(deps.Cfg.Clock.Location)
+	location, _ = time.LoadLocation(deps.Config.Clock.Location)
 
 	return &Clock{
 		location: location,

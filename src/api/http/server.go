@@ -26,7 +26,7 @@ func NewServer(deps ServerDependencies) *Server {
 	v1.POST("/invoices", api.invoiceHandler.CreateInvoice)
 	v1.POST("/hooks/invoices", api.invoiceHandler.HookProcessInvoice)
 
-	if err := r.Run(":" + deps.Cfg.Api.Port); err != nil {
+	if err := r.Run(":" + deps.Config.Api.Port); err != nil {
 		panic(err)
 	}
 

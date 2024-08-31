@@ -26,9 +26,9 @@ type Dependencies struct {
 func NewBankGateway(deps Dependencies) *BankGateway {
 	return &BankGateway{
 		user: project.Project{
-			Id:          deps.Cfg.BankProvider.Starkbank.ProjectId,
-			Environment: deps.Cfg.BankProvider.Starkbank.Environment,
-			PrivateKey:  deps.Cfg.BankProvider.Starkbank.PrivateKey,
+			Id:          deps.Config.BankProvider.Starkbank.ProjectId,
+			Environment: deps.Config.BankProvider.Starkbank.Environment,
+			PrivateKey:  deps.Config.BankProvider.Starkbank.PrivateKey,
 		},
 	}
 }

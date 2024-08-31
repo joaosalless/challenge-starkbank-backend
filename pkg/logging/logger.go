@@ -14,8 +14,8 @@ type Logger struct {
 
 type Dependencies struct {
 	dig.In
-	Cfg   *config.Config   `name:"Config"`
-	Clock interfaces.Clock `name:"Clock"`
+	Config *config.Config   `name:"Config"`
+	Clock  interfaces.Clock `name:"Clock"`
 }
 
 func NewLogger(deps Dependencies) *Logger {
