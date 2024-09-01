@@ -1,4 +1,4 @@
-# Challenge StarkBank
+# Challenge StarkBank Backend
 
 Este repositório contém a implementação do desafio proposto pela StarkBank para desenvolvedores backend. A aplicação realiza a emissão de invoices e processa webhooks de recebimento, efetuando a transferência do valor recebido para uma conta especificada.
 
@@ -14,7 +14,7 @@ Este repositório contém a implementação do desafio proposto pela StarkBank p
     - [x] Controller
         - [ ] Testes unitários
     - [x] Service
-        - [ ] Testes unitários
+        - [x] Testes unitários
 
 ## Estrutura do Projeto
 
