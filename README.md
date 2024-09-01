@@ -30,6 +30,7 @@ O projeto utiliza um `Makefile` para facilitar a execução das principais taref
 - `make api`: Inicia a API.
 - `make schedule`: Inicia o agendador.
 - `make test`: Executa os testes unitários.
+- `make coverage`: Gera relatório de cobertura de testes unitários.
 - `make mocks`: Gera os mocks das interfaces.
 - `make clean`: Limpa arquivos gerados.
 - `make docker-build`: Constrói a imagem Docker do projeto.
