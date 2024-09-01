@@ -5,6 +5,10 @@
 package mocks
 
 import (
+	context "context"
+	dtos "joaosalless/challenge-starkbank/src/dtos"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -29,4 +33,34 @@ func NewMockTransferService(ctrl *gomock.Controller) *MockTransferService {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockTransferService) EXPECT() *MockTransferServiceMockRecorder {
 	return m.recorder
+}
+
+// CreateTransfer mocks base method.
+func (m *MockTransferService) CreateTransfer(ctx context.Context, input dtos.CreateTransferInput) (dtos.CreateTransferOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTransfer", ctx, input)
+	ret0, _ := ret[0].(dtos.CreateTransferOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateTransfer indicates an expected call of CreateTransfer.
+func (mr *MockTransferServiceMockRecorder) CreateTransfer(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransfer", reflect.TypeOf((*MockTransferService)(nil).CreateTransfer), ctx, input)
+}
+
+// CreateTransferFromInvoice mocks base method.
+func (m *MockTransferService) CreateTransferFromInvoice(ctx context.Context, input dtos.CreateTransferFromInvoiceInput) (dtos.CreateTransferOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTransferFromInvoice", ctx, input)
+	ret0, _ := ret[0].(dtos.CreateTransferOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateTransferFromInvoice indicates an expected call of CreateTransferFromInvoice.
+func (mr *MockTransferServiceMockRecorder) CreateTransferFromInvoice(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransferFromInvoice", reflect.TypeOf((*MockTransferService)(nil).CreateTransferFromInvoice), ctx, input)
 }

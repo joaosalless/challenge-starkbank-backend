@@ -25,12 +25,12 @@ var container *dig.Container
 func Initialize() *dig.Container {
 	container = dig.New()
 
-	err := container.Provide(config.LoadConfig, dig.Name("Config"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	deps := []Dependency{
+		{
+			Constructor: config.LoadConfig,
+			Interface:   nil,
+			Name:        "Config",
+		},
 		{
 			Constructor: clock.NewClock,
 			Interface:   new(interfaces.Clock),
@@ -79,7 +79,14 @@ func Initialize() *dig.Container {
 	}
 
 	for _, dep := range deps {
-		err = container.Provide(dep.Constructor, dig.As(dep.Interface), dig.Name(dep.Name))
+		var err error
+
+		if dep.Interface != nil {
+			err = container.Provide(dep.Constructor, dig.As(dep.Interface), dig.Name(dep.Name))
+		} else {
+			err = container.Provide(dep.Constructor, dig.Name(dep.Name))
+		}
+
 		if err != nil {
 			log.Fatal(err)
 		}

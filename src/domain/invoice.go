@@ -4,6 +4,14 @@ import (
 	"time"
 )
 
+const (
+	InvoiceStatusCreated = "created"
+	InvoiceStatusPaid    = "paid"
+
+	InvoiceEventCreated  = "created"
+	InvoiceEventCredited = "credited"
+)
+
 type Invoice struct {
 	Id                 string                   `json:",omitempty"`
 	Amount             int                      `json:",omitempty"`
@@ -30,4 +38,5 @@ type Invoice struct {
 	TransactionIds     []string                 `json:",omitempty"`
 	Created            *time.Time               `json:",omitempty"`
 	Updated            *time.Time               `json:",omitempty"`
+	ExternalId         string                   `json:",omitempty"`
 }
