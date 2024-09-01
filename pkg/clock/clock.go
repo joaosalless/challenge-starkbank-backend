@@ -2,7 +2,7 @@ package clock
 
 import (
 	"github.com/joaosalless/challenge-starkbank-backend/config"
-	"go.uber.org/dig"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"time"
 )
 
@@ -11,7 +11,7 @@ type Clock struct {
 }
 
 type Dependencies struct {
-	dig.In
+	ioc.In
 	Config *config.Config `name:"Config"`
 }
 

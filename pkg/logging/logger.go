@@ -2,8 +2,8 @@ package logging
 
 import (
 	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
-	"go.uber.org/dig"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -13,7 +13,7 @@ type Logger struct {
 }
 
 type Dependencies struct {
-	dig.In
+	ioc.In
 	Config *config.Config   `name:"Config"`
 	Clock  interfaces.Clock `name:"Clock"`
 }
