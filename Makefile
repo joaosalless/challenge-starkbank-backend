@@ -18,7 +18,7 @@ schedule:
 
 test:
 	@echo "Running tests..."
-	go test ./src/...
+	go test ./src/... -v
 
 coverage:
 	@echo "Generating test coverage report..."
