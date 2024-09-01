@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/joaosalless/challenge-starkbank-backend/config"
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/clock"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/logging"
 	"github.com/joaosalless/challenge-starkbank-backend/src/api/http/handlers"
 	"github.com/joaosalless/challenge-starkbank-backend/src/controllers"
@@ -11,21 +12,10 @@ import (
 	"github.com/joaosalless/challenge-starkbank-backend/src/schedule"
 	"github.com/joaosalless/challenge-starkbank-backend/src/services"
 	"go.uber.org/dig"
-	"log"
 )
 
-type Dependency struct {
-	Constructor interface{}
-	Interface   interface{}
-	Name        string
-}
-
-var container *dig.Container
-
 func Initialize() *dig.Container {
-	container = dig.New()
-
-	deps := []Dependency{
+	return ioc.New([]ioc.Dependency{
 		{
 			Constructor: config.LoadConfig,
 			Interface:   nil,
@@ -76,21 +66,5 @@ func Initialize() *dig.Container {
 			Interface:   new(interfaces.ScheduledTasks),
 			Name:        "ScheduledTasks",
 		},
-	}
-
-	for _, dep := range deps {
-		var err error
-
-		if dep.Interface != nil {
-			err = container.Provide(dep.Constructor, dig.As(dep.Interface), dig.Name(dep.Name))
-		} else {
-			err = container.Provide(dep.Constructor, dig.Name(dep.Name))
-		}
-
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	return container
+	})
 }
