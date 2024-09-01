@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"github.com/mvrilo/go-cpf"
-	"joaosalless/challenge-starkbank/pkg/app"
-	"joaosalless/challenge-starkbank/src/domain"
-	"joaosalless/challenge-starkbank/src/dtos"
-	"joaosalless/challenge-starkbank/src/interfaces"
 	"time"
 )
 

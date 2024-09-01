@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"joaosalless/challenge-starkbank/pkg/app"
-	"joaosalless/challenge-starkbank/src/domain"
-	"joaosalless/challenge-starkbank/src/dtos"
-	"joaosalless/challenge-starkbank/src/interfaces"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"time"
 )
 

@@ -1,8 +1,8 @@
 package clock
 
 import (
+	"github.com/joaosalless/challenge-starkbank-backend/config"
 	"go.uber.org/dig"
-	"joaosalless/challenge-starkbank/config"
 	"time"
 )
 

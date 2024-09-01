@@ -1,16 +1,16 @@
 package cmd
 
 import (
+	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/clock"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/logging"
+	"github.com/joaosalless/challenge-starkbank-backend/src/api/http/handlers"
+	"github.com/joaosalless/challenge-starkbank-backend/src/controllers"
+	"github.com/joaosalless/challenge-starkbank-backend/src/gateways/bank"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
+	"github.com/joaosalless/challenge-starkbank-backend/src/schedule"
+	"github.com/joaosalless/challenge-starkbank-backend/src/services"
 	"go.uber.org/dig"
-	"joaosalless/challenge-starkbank/config"
-	"joaosalless/challenge-starkbank/pkg/clock"
-	"joaosalless/challenge-starkbank/pkg/logging"
-	"joaosalless/challenge-starkbank/src/api/http/handlers"
-	"joaosalless/challenge-starkbank/src/controllers"
-	"joaosalless/challenge-starkbank/src/gateways/bank"
-	"joaosalless/challenge-starkbank/src/interfaces"
-	"joaosalless/challenge-starkbank/src/schedule"
-	"joaosalless/challenge-starkbank/src/services"
 	"log"
 )
 

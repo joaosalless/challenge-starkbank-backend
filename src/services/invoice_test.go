@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/mvrilo/go-cpf"
-	"joaosalless/challenge-starkbank/src/domain"
 	"testing"
 	"time"
 
 	"github.com/golang/mock/gomock"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/mocks"
 	"github.com/stretchr/testify/assert"
-	"joaosalless/challenge-starkbank/src/dtos"
-	"joaosalless/challenge-starkbank/src/mocks"
 )
 
 func TestInvoiceService_CreateInvoice(t *testing.T) {

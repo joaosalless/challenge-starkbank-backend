@@ -1,7 +1,7 @@
 package dtos
 
 import (
-	"joaosalless/challenge-starkbank/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 )
 
 type CreateInvoiceInput struct {

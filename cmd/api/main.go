@@ -1,8 +1,8 @@
 package main
 
 import (
-	"joaosalless/challenge-starkbank/cmd"
-	"joaosalless/challenge-starkbank/src/api/http"
+	"github.com/joaosalless/challenge-starkbank-backend/cmd"
+	"github.com/joaosalless/challenge-starkbank-backend/src/api/http"
 	"log"
 )
 

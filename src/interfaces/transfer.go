@@ -2,7 +2,7 @@ package interfaces
 
 import (
 	"context"
-	"joaosalless/challenge-starkbank/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 )
 
 type TransferService interface {

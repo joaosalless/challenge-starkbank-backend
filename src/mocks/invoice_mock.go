@@ -6,7 +6,7 @@ package mocks
 
 import (
 	context "context"
-	dtos "joaosalless/challenge-starkbank/src/dtos"
+	dtos "github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	reflect "reflect"
 
 	gin "github.com/gin-gonic/gin"

@@ -1,9 +1,9 @@
 package app
 
 import (
+	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"go.uber.org/dig"
-	"joaosalless/challenge-starkbank/config"
-	"joaosalless/challenge-starkbank/src/interfaces"
 )
 
 type Dependencies struct {

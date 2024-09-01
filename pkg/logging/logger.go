@@ -1,11 +1,11 @@
 package logging
 
 import (
+	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"go.uber.org/dig"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"joaosalless/challenge-starkbank/config"
-	"joaosalless/challenge-starkbank/src/interfaces"
 )
 
 type Logger struct {

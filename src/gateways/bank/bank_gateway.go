@@ -3,15 +3,15 @@ package bank
 import (
 	"context"
 	"fmt"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	StarkInvoice "github.com/starkbank/sdk-go/starkbank/invoice"
 	StarkInvoiceRule "github.com/starkbank/sdk-go/starkbank/invoice/rule"
 	StarkTransfer "github.com/starkbank/sdk-go/starkbank/transfer"
 	StarkTransferRule "github.com/starkbank/sdk-go/starkbank/transfer/rule"
 	"github.com/starkinfra/core-go/starkcore/user/project"
 	"github.com/starkinfra/core-go/starkcore/user/user"
-	"joaosalless/challenge-starkbank/pkg/app"
-	"joaosalless/challenge-starkbank/src/domain"
-	"joaosalless/challenge-starkbank/src/dtos"
 )
 
 // BankGateway implements interfaces.BankGateway

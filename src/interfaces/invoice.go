@@ -3,7 +3,7 @@ package interfaces
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"joaosalless/challenge-starkbank/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 )
 
 type InvoiceHandler interface {

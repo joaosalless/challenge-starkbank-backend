@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang/mock/gomock"
+	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/mocks"
 	"github.com/stretchr/testify/assert"
-	"joaosalless/challenge-starkbank/config"
-	"joaosalless/challenge-starkbank/src/domain"
-	"joaosalless/challenge-starkbank/src/dtos"
-	"joaosalless/challenge-starkbank/src/mocks"
 	"testing"
 )
 

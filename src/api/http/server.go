@@ -2,8 +2,8 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"joaosalless/challenge-starkbank/pkg/app"
-	"joaosalless/challenge-starkbank/src/interfaces"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 )
 
 type Server struct {

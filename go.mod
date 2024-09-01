@@ -1,4 +1,4 @@
-module joaosalless/challenge-starkbank
+module github.com/joaosalless/challenge-starkbank-backend
 
 go 1.22
 

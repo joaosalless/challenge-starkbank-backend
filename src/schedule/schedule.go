@@ -2,9 +2,9 @@ package schedule
 
 import (
 	"fmt"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"github.com/robfig/cron/v3"
-	"joaosalless/challenge-starkbank/pkg/app"
-	"joaosalless/challenge-starkbank/src/interfaces"
 	"log"
 )
 
