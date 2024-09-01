@@ -1,5 +1,5 @@
 CMD_DIR=./cmd
-MOCKS_DIR=./src/mocks
+MOCKS_DIR=./src/interfaces/mocks
 MIGRATIONS_DIR=./src/migrations
 INTERFACES_DIR=./src/interfaces
 MOCKGEN=$(shell go env GOPATH)/bin/mockgen

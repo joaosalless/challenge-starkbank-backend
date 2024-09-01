@@ -6,10 +6,10 @@ package mocks
 
 import (
 	context "context"
-	dtos "github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	dtos "github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 )
 
 // MockBankGateway is a mock of BankGateway interface.

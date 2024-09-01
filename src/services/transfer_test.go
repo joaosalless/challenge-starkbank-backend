@@ -9,7 +9,7 @@ import (
 	"github.com/joaosalless/challenge-starkbank-backend/config"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
-	"github.com/joaosalless/challenge-starkbank-backend/src/mocks"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

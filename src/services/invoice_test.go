@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces/mocks"
 	"github.com/mvrilo/go-cpf"
 	"testing"
 	"time"
 
 	"github.com/golang/mock/gomock"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
-	"github.com/joaosalless/challenge-starkbank-backend/src/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
