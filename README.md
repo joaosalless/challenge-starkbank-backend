@@ -121,7 +121,9 @@ https://direnv.net
 direnv --version
 ```
 
-### 10. Defina as variáveis de ambiente abaixo
+### 10. Defina as variáveis de ambient
+
+Crie um arquivo chamado `.env` na raiz do projeto e defina as variáveis abaixo
 
 ```sh
 # APP
