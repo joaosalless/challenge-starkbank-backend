@@ -4,7 +4,7 @@ MIGRATIONS_DIR=./src/migrations
 INTERFACES_DIR=./src/interfaces
 MOCKGEN=$(shell go env GOPATH)/bin/mockgen
 
-.PHONY: all run api schedule test mocks clean docker-build docker-up docker-down
+.PHONY: all run api schedule test coverage mocks clean build docker-build docker-up docker-down
 
 all: build
 
@@ -41,7 +41,7 @@ clean:
 build:
 	@echo "Building project..."
 	go build -o bin/api $(CMD_DIR)/api/main.go
-	go build -o bin/cron $(CMD_DIR)/cron/main.go
+	go build -o bin/cron $(CMD_DIR)/schedule/main.go
 
 docker-build:
 	@echo "Build docker image..."
