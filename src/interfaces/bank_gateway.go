@@ -8,7 +8,6 @@ import (
 )
 
 type BankGateway interface {
-	GetUser() BankGatewayUser
 	CreateInvoice(ctx context.Context, input dtos.CreateInvoiceInput) (output dtos.CreateInvoiceOutput, err error)
 	CreateTransfer(ctx context.Context, input dtos.CreateTransferInput) (output dtos.CreateTransferOutput, err error)
 	ParseEvent(ctx context.Context, input dtos.WebhookProcessEventInput) (output domain.Event, err error)
