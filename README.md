@@ -41,8 +41,8 @@ Para rodar a aplicação, utilize os comandos do `Makefile` seguindo os passos a
 ### 1. Clone o projeto usando o git
 
 ```sh
-git clone https://github.com/joaosalless/challenge-starkbank-joaosalless.git
-cd challenge-starkbank-joaosalless
+git clone git@github.com:joaosalless/challenge-starkbank-backend.git challenge-starkbank-backend-joaosalless
+cd challenge-starkbank-backend-joaosalless
 ```
 
 ### 2. Instale o Go (se ainda não estiver instalado)
