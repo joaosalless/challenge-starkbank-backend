@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	domain "github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	dtos "github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	interfaces "github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	privatekey "github.com/starkbank/ecdsa-go/v2/ellipticcurve/privatekey"
@@ -79,6 +80,51 @@ func (m *MockBankGateway) GetUser() interfaces.BankGatewayUser {
 func (mr *MockBankGatewayMockRecorder) GetUser() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockBankGateway)(nil).GetUser))
+}
+
+// ParseEvent mocks base method.
+func (m *MockBankGateway) ParseEvent(ctx context.Context, input dtos.WebhookProcessEventInput) (domain.Event, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ParseEvent", ctx, input)
+	ret0, _ := ret[0].(domain.Event)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ParseEvent indicates an expected call of ParseEvent.
+func (mr *MockBankGatewayMockRecorder) ParseEvent(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseEvent", reflect.TypeOf((*MockBankGateway)(nil).ParseEvent), ctx, input)
+}
+
+// ParseInvoiceEventLog mocks base method.
+func (m *MockBankGateway) ParseInvoiceEventLog(ctx context.Context, event domain.Event) (domain.InvoiceEventLog, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ParseInvoiceEventLog", ctx, event)
+	ret0, _ := ret[0].(domain.InvoiceEventLog)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ParseInvoiceEventLog indicates an expected call of ParseInvoiceEventLog.
+func (mr *MockBankGatewayMockRecorder) ParseInvoiceEventLog(ctx, event interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseInvoiceEventLog", reflect.TypeOf((*MockBankGateway)(nil).ParseInvoiceEventLog), ctx, event)
+}
+
+// ParseTransferEventLog mocks base method.
+func (m *MockBankGateway) ParseTransferEventLog(ctx context.Context, event domain.Event) (domain.TransferEventLog, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ParseTransferEventLog", ctx, event)
+	ret0, _ := ret[0].(domain.TransferEventLog)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ParseTransferEventLog indicates an expected call of ParseTransferEventLog.
+func (mr *MockBankGatewayMockRecorder) ParseTransferEventLog(ctx, event interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseTransferEventLog", reflect.TypeOf((*MockBankGateway)(nil).ParseTransferEventLog), ctx, event)
 }
 
 // MockBankGatewayUser is a mock of BankGatewayUser interface.

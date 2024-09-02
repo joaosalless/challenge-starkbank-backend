@@ -2,13 +2,11 @@ package controllers
 
 import (
 	"context"
-	"encoding/json"
+	"fmt"
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
-	StarkbankEvent "github.com/starkbank/sdk-go/starkbank/event"
-	StarkbankInvoiceLog "github.com/starkbank/sdk-go/starkbank/invoice/log"
 )
 
 type WebhookController struct {
@@ -38,51 +36,32 @@ func NewWebhookController(deps WebhookControllerDependencies) *WebhookController
 func (wc WebhookController) ProcessEvent(ctx context.Context, input dtos.WebhookProcessEventInput) (output dtos.WebhookProcessEventOutput, err error) {
 	wc.app.Logger().Infow("WebhookController.ProcessEvents called", "input", input)
 
-	parsedEventInterface := StarkbankEvent.Parse(string(input.Content), input.Signature, wc.bankGateway.GetUser())
-	if parsedEventInterface == nil {
-		wc.app.Logger().Errorw("Failed to parse webhook event")
-		output.Errors = append(output.Errors, domain.Error{Code: "webhook.failed_to_parse_event", Message: "Failed to parse webhook event"})
-		return output, err
-	}
-
-	parsedEventStr, ok := parsedEventInterface.(string)
-	if !ok {
-		wc.app.Logger().Errorw("Failed to parse webhook event")
-		output.Errors = append(output.Errors, domain.Error{Code: "webhook.failed_to_parse_event", Message: "Unexpected type returned from StarkbankEvent.Parse"})
-		return output, err
-	}
-
-	var eventContainer struct {
-		Event StarkbankEvent.Event `json:"event"`
-	}
-
-	err = json.Unmarshal([]byte(parsedEventStr), &eventContainer)
+	event, err := wc.bankGateway.ParseEvent(ctx, input)
 	if err != nil {
-		wc.app.Logger().Errorw("Failed to unmarshal event JSON", "error", err)
-		output.Errors = append(output.Errors, domain.Error{Code: "webhook.failed_to_parse_event", Message: "Failed to unmarshal event JSON"})
-		return output, err
+		return output, fmt.Errorf("failed to parse event: %w", err)
 	}
 
-	parsedEvent := eventContainer.Event.ParseLog()
+	if event.Subscription == domain.EventSubscriptionInvoice {
+		eventLog, err := wc.bankGateway.ParseInvoiceEventLog(ctx, event)
+		if err != nil {
+			return output, fmt.Errorf("failed to parse %s event log: %w", event.Subscription, err)
+		}
 
-	parsedLog, ok := parsedEvent.Log.(StarkbankInvoiceLog.Log)
-	if !ok {
-		wc.app.Logger().Errorw("Failed to parse webhook event log")
-		output.Errors = append(output.Errors, domain.Error{Code: "webhook.failed_to_parse_event_log", Message: "Failed to parse webhook event log"})
-		return output, err
-	}
+		wc.app.Logger().Infow("transfer event log parsed successfully", "eventLog", eventLog)
 
-	if parsedEvent.Subscription == "invoice" {
-		parsedInvoice := parsedLog.Invoice
-
-		if parsedInvoice.Status == "paid" {
-			_, err = wc.transferService.CreateTransferFromInvoice(ctx, dtos.CreateTransferFromInvoiceInput{Data: parsedInvoice})
+		if eventLog.Type == domain.InvoiceEventCredited {
+			_, err := wc.transferService.CreateTransferFromInvoice(ctx, dtos.CreateTransferFromInvoiceInput{Data: domain.Invoice(eventLog.Invoice)})
 			if err != nil {
-				wc.app.Logger().Errorw("Failed to CreateTransferFromInvoice", "error", err)
 				return output, err
 			}
-			return output, nil
 		}
+	} else if event.Subscription == domain.EventSubscriptionTransfer {
+		eventLog, err := wc.bankGateway.ParseTransferEventLog(ctx, event)
+		if err != nil {
+			return output, fmt.Errorf("failed to parse %s event log: %w", event.Subscription, err)
+		}
+
+		wc.app.Logger().Infow("transfer event log parsed successfully", "eventLog", eventLog)
 	}
 
 	output.Message = "Webhook event log processed successfully"

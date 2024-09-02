@@ -2,18 +2,22 @@ package bank
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/joaosalless/challenge-starkbank-backend/config"
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
+	StarkbankEvent "github.com/starkbank/sdk-go/starkbank/event"
 	StarkbankInvoice "github.com/starkbank/sdk-go/starkbank/invoice"
+	StarkbankInvoiceLog "github.com/starkbank/sdk-go/starkbank/invoice/log"
 	StarkTransfer "github.com/starkbank/sdk-go/starkbank/transfer"
+	StarkbankTransferLog "github.com/starkbank/sdk-go/starkbank/transfer/log"
 	"github.com/starkinfra/core-go/starkcore/user/project"
 )
 
-// BankGateway implements interfaces.BankGateway
 type BankGateway struct {
 	app  interfaces.Application
 	user interfaces.BankGatewayUser
@@ -36,8 +40,47 @@ func NewBankGateway(deps Dependencies) *BankGateway {
 	}
 }
 
-func (g BankGateway) GetUser() interfaces.BankGatewayUser {
-	return g.user
+func (g BankGateway) ParseEvent(ctx context.Context, input dtos.WebhookProcessEventInput) (output domain.Event, err error) {
+	eventInterface := StarkbankEvent.Parse(string(input.Content), input.Signature, g.user)
+	if eventInterface == nil {
+		return output, errors.New("failed to parse webhook event")
+	}
+
+	parsedEventStr, ok := eventInterface.(string)
+	if !ok {
+		return output, errors.New("failed to parse webhook event interface")
+	}
+
+	var eventContainer struct {
+		Event StarkbankEvent.Event `json:"event"`
+	}
+
+	err = json.Unmarshal([]byte(parsedEventStr), &eventContainer)
+	if err != nil {
+		return output, errors.New("failed to unmarshal event json")
+	}
+
+	parsedEvent := eventContainer.Event.ParseLog()
+
+	return domain.Event(parsedEvent), nil
+}
+
+func (g BankGateway) ParseInvoiceEventLog(ctx context.Context, event domain.Event) (log domain.InvoiceEventLog, err error) {
+	parsedLog, ok := event.Log.(StarkbankInvoiceLog.Log)
+	if !ok {
+		return domain.InvoiceEventLog{}, errors.New("failed to parse webhook invoice event log")
+	}
+
+	return domain.InvoiceEventLog(parsedLog), nil
+}
+
+func (g BankGateway) ParseTransferEventLog(ctx context.Context, event domain.Event) (log domain.TransferEventLog, err error) {
+	parsedLog, ok := event.Log.(StarkbankTransferLog.Log)
+	if !ok {
+		return domain.TransferEventLog{}, errors.New("failed to parse webhook transfer event log")
+	}
+
+	return domain.TransferEventLog(parsedLog), nil
 }
 
 func (g BankGateway) CreateInvoice(ctx context.Context, input dtos.CreateInvoiceInput) (output dtos.CreateInvoiceOutput, err error) {
