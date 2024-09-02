@@ -53,16 +53,6 @@ func Initialize() *dig.Container {
 			Name:        "TransferService",
 		},
 		{
-			Constructor: controllers.NewInvoiceController,
-			Interface:   new(interfaces.InvoiceController),
-			Name:        "InvoiceController",
-		},
-		{
-			Constructor: handlers.NewInvoiceHandler,
-			Interface:   new(interfaces.InvoiceHandler),
-			Name:        "InvoiceHandler",
-		},
-		{
 			Constructor: handlers.NewWebhookHandler,
 			Interface:   new(interfaces.WebhookHandler),
 			Name:        "WebhookHandler",

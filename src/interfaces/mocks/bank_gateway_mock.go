@@ -11,7 +11,6 @@ import (
 	gomock "github.com/golang/mock/gomock"
 	domain "github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	dtos "github.com/joaosalless/challenge-starkbank-backend/src/dtos"
-	interfaces "github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	privatekey "github.com/starkbank/ecdsa-go/v2/ellipticcurve/privatekey"
 )
 
@@ -66,20 +65,6 @@ func (m *MockBankGateway) CreateTransfer(ctx context.Context, input dtos.CreateT
 func (mr *MockBankGatewayMockRecorder) CreateTransfer(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransfer", reflect.TypeOf((*MockBankGateway)(nil).CreateTransfer), ctx, input)
-}
-
-// GetUser mocks base method.
-func (m *MockBankGateway) GetUser() interfaces.BankGatewayUser {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUser")
-	ret0, _ := ret[0].(interfaces.BankGatewayUser)
-	return ret0
-}
-
-// GetUser indicates an expected call of GetUser.
-func (mr *MockBankGatewayMockRecorder) GetUser() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockBankGateway)(nil).GetUser))
 }
 
 // ParseEvent mocks base method.

@@ -13,23 +13,23 @@ import (
 )
 
 type InvoiceCreateScheduledTask struct {
-	scheduledTime     string
-	app               interfaces.Application
-	invoiceController interfaces.InvoiceController
+	scheduledTime  string
+	app            interfaces.Application
+	invoiceService interfaces.InvoiceService
 }
 
 type InvoiceCreateScheduledTaskDependencies struct {
 	ioc.In
-	Config            *config.Config               `name:"Config"`
-	Application       interfaces.Application       `name:"Application"`
-	InvoiceController interfaces.InvoiceController `name:"InvoiceController"`
+	Config         *config.Config            `name:"Config"`
+	Application    interfaces.Application    `name:"Application"`
+	InvoiceService interfaces.InvoiceService `name:"InvoiceService"`
 }
 
 func NewInvoiceCreateScheduledTask(deps InvoiceCreateScheduledTaskDependencies) *InvoiceCreateScheduledTask {
 	return &InvoiceCreateScheduledTask{
-		app:               deps.Application,
-		scheduledTime:     deps.Config.Scheduler.InvoiceCreateScheduledTime,
-		invoiceController: deps.InvoiceController,
+		app:            deps.Application,
+		scheduledTime:  deps.Config.Scheduler.InvoiceCreateScheduledTime,
+		invoiceService: deps.InvoiceService,
 	}
 }
 
@@ -59,7 +59,7 @@ func (ic *InvoiceCreateScheduledTask) Run() (err error) {
 
 	ic.app.Logger().Infow("finished InvoiceCreateScheduledTask", "invoices", invoices)
 
-	_, err = ic.invoiceController.CreateInvoice(context.Background(), dtos.CreateInvoiceInput{Data: invoices})
+	_, err = ic.invoiceService.CreateInvoice(context.Background(), dtos.CreateInvoiceInput{Data: invoices})
 	if err != nil {
 		ic.app.Logger().Errorw("error creating invoices", "error", err)
 		return err
