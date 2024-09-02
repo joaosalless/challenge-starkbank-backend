@@ -10,7 +10,6 @@ import (
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"github.com/mvrilo/go-cpf"
-	"time"
 )
 
 type InvoiceCreateScheduledTask struct {
@@ -45,15 +44,14 @@ func (ic *InvoiceCreateScheduledTask) Run() (err error) {
 
 	var invoices []domain.Invoice
 
-	for i := 0; i < gofakeit.Number(8, 12); i++ {
-		due := gofakeit.DateRange(
-			time.Now().AddDate(0, 0, 1),
-			time.Now().AddDate(0, 0, 60))
+	for i := 0; i < gofakeit.Number(ic.app.Config().Invoice.RandomInvoicesNumberMin, ic.app.Config().Invoice.RandomInvoicesNumberMax); i++ {
+		now := ic.app.Clock().Now()
+		due := gofakeit.DateRange(now, now.AddDate(0, 0, 1))
 
 		invoices = append(invoices, domain.Invoice{
 			Amount:     gofakeit.Number(10000, 20000),
 			Due:        &due,
-			Expiration: 1,
+			Expiration: ic.app.Config().Invoice.ExpirationDays,
 			Name:       fmt.Sprintf("%s %s", gofakeit.Person().FirstName, gofakeit.Person().LastName),
 			TaxId:      cpf.GeneratePretty(),
 		})
