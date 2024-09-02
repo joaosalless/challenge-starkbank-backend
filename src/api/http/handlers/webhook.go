@@ -10,7 +10,6 @@ import (
 
 type WebhookHandler struct {
 	app               interfaces.Application
-	bankGateway       interfaces.BankGateway
 	webhookController interfaces.WebhookController
 }
 
