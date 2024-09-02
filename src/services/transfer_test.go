@@ -148,7 +148,7 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 							BranchCode:    deps.transferConfig.BankAccount.BranchCode,
 							AccountNumber: deps.transferConfig.BankAccount.AccountNumber,
 							AccountType:   deps.transferConfig.BankAccount.AccountType,
-							ExternalId:    fmt.Sprintf("invoice:%s", invoice.Id),
+							ExternalId:    fmt.Sprintf("invoice-%s", invoice.Id),
 							Tags: []string{
 								fmt.Sprintf("invoice:%s", invoice.Id),
 							},
@@ -192,7 +192,7 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 							BranchCode:    deps.transferConfig.BankAccount.BranchCode,
 							AccountNumber: deps.transferConfig.BankAccount.AccountNumber,
 							AccountType:   deps.transferConfig.BankAccount.AccountType,
-							ExternalId:    fmt.Sprintf("invoice:%s", invoice.Id),
+							ExternalId:    fmt.Sprintf("invoice-%s", invoice.Id),
 							Tags: []string{
 								fmt.Sprintf("invoice:%s", invoice.Id),
 							},

@@ -60,7 +60,7 @@ func (i TransferService) CreateTransferFromInvoice(ctx context.Context, input dt
 		BranchCode:    i.transferConfig.BankAccount.BranchCode,
 		AccountNumber: i.transferConfig.BankAccount.AccountNumber,
 		AccountType:   i.transferConfig.BankAccount.AccountType,
-		ExternalId:    fmt.Sprintf("invoice:%s", input.Data.Id),
+		ExternalId:    fmt.Sprintf("invoice-%s", input.Data.Id),
 		Tags: []string{
 			fmt.Sprintf("invoice:%s", input.Data.Id),
 		},
