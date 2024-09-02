@@ -33,12 +33,6 @@ func NewInvoiceCreateScheduledTask(deps InvoiceCreateScheduledTaskDependencies) 
 	}
 }
 
-func (ic *InvoiceCreateScheduledTask) Schedule() error {
-	ic.app.Logger().Infow("initializing invoice schedule", "scheduledTime", ic.scheduledTime)
-
-	return nil
-}
-
 func (ic *InvoiceCreateScheduledTask) Run() (err error) {
 	ic.app.Logger().Infow("starting InvoiceCreateScheduledTask", "scheduledTime", ic.scheduledTime)
 
