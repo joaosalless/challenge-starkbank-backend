@@ -4,21 +4,18 @@ Este repositório contém a implementação do desafio proposto pela StarkBank p
 
 ## Funcionalidades Implementadas
 
-- [x] Emissão de invoices a cada 3 horas para destinatários aleatórios.
+- [x] Emissão de invoices a cada 3 horas (configurável via variável de ambiente) para destinatários aleatórios.
 - [x] Processamento de webhooks para invoices pagas.
 - [x] Cálculo do valor a ser transferido com base nas informações da invoice.
-- [x] Transferência do valor para a conta configurada após o pagamento da invoice.
+- [x] Transferência do valor para a conta configurada, após o pagamento da invoice.
 - [x] Implementação das camadas:
-    - [x] Handler
-        - [ ] Testes unitários
-    - [x] Controller
-        - [ ] Testes unitários
-    - [x] Service
-        - [x] Testes unitários
-
-## Estrutura do Projeto
-
-A estrutura do projeto segue uma arquitetura baseada em camadas, visando manter a separação de responsabilidades e facilitar a manutenção do código.
+  - [x] Domain (abstração de modelos de dados para evitar acoplamento com modelos de dados externos)
+  - [x] Schedules (agendador de tarefas de criação de invoices)
+  - [x] API
+    - [x] Handlers
+      - [x] Controllers
+        - [x] Services
+        - [x] Integration/BankGateways
 
 ## Makefile
 
@@ -123,7 +120,7 @@ direnv --version
 
 ### 10. Defina as variáveis de ambient
 
-Crie um arquivo chamado `.env` na raiz do projeto e defina as variáveis abaixo
+Crie um arquivo chamado `.env` na raiz do projeto e defina as variáveis abaixo.
 
 ```sh
 # APP
@@ -157,6 +154,7 @@ INVOICE_CREATE_SCHEDULED_TIME='@every 3h'
 # Bank Gateway
 STARKBANK_PROJECT_ID=
 STARKBANK_ENVIRONMENT=
+STARKBANK_DIGITAL_SIGNATURE_HEADER='Digital-Signature'
 STARKBANK_PRIVATE_KEY=
 STARKBANK_PUBLIC_KEY=
 ```
