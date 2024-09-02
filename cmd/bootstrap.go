@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/application"
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/clock"
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/logging"
@@ -32,6 +33,11 @@ func Initialize() *dig.Container {
 			Name:        "Logger",
 		},
 		{
+			Constructor: application.New,
+			Interface:   new(interfaces.Application),
+			Name:        "Application",
+		},
+		{
 			Constructor: bank.NewBankGateway,
 			Interface:   new(interfaces.BankGateway),
 			Name:        "BankGateway",
@@ -55,6 +61,16 @@ func Initialize() *dig.Container {
 			Constructor: handlers.NewInvoiceHandler,
 			Interface:   new(interfaces.InvoiceHandler),
 			Name:        "InvoiceHandler",
+		},
+		{
+			Constructor: handlers.NewWebhookHandler,
+			Interface:   new(interfaces.WebhookHandler),
+			Name:        "WebhookHandler",
+		},
+		{
+			Constructor: controllers.NewWebhookController,
+			Interface:   new(interfaces.WebhookController),
+			Name:        "WebhookController",
 		},
 		{
 			Constructor: schedule.NewInvoiceCreateScheduledTask,

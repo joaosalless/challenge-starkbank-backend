@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/application"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
@@ -19,7 +19,7 @@ type InvoiceCreateScheduledTask struct {
 }
 
 type InvoiceCreateScheduledTaskDependencies struct {
-	app.Dependencies
+	application.Dependencies
 	InvoiceController interfaces.InvoiceController `name:"InvoiceController"`
 }
 
@@ -44,7 +44,7 @@ func (ic *InvoiceCreateScheduledTask) Run() (err error) {
 
 	for i := 0; i < gofakeit.Number(8, 12); i++ {
 		due := gofakeit.DateRange(
-			time.Now().AddDate(0, 0, 3),
+			time.Now().AddDate(0, 0, 1),
 			time.Now().AddDate(0, 0, 60))
 
 		invoices = append(invoices, domain.Invoice{

@@ -4,19 +4,23 @@ import (
 	"context"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/golang/mock/gomock"
+	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/application"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/clock"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces/mocks"
 	"github.com/mvrilo/go-cpf"
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
-
-	"github.com/golang/mock/gomock"
-	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestInvoiceService_CreateInvoice(t *testing.T) {
 	type deps struct {
+		app         interfaces.Application
 		logger      *mocks.MockLogger
 		bankGateway *mocks.MockBankGateway
 	}
@@ -49,8 +53,8 @@ func TestInvoiceService_CreateInvoice(t *testing.T) {
 				}
 
 				deps.logger.EXPECT().
-					Infow("InvoiceService.CreateInvoice", "input", gomock.Any()).
-					Times(1)
+					Infow(gomock.Any(), gomock.Any(), gomock.Any()).
+					AnyTimes()
 
 				deps.bankGateway.EXPECT().
 					CreateInvoice(gomock.Any(), invoice).
@@ -70,7 +74,9 @@ func TestInvoiceService_CreateInvoice(t *testing.T) {
 		{
 			name: "should fail when bank gateway returns error",
 			setup: func(ctrl *gomock.Controller, ctx context.Context, deps deps, invoice dtos.CreateInvoiceInput) setup {
-				deps.logger.EXPECT().Infow("InvoiceService.CreateInvoice", "input", gomock.Any()).Times(1)
+				deps.logger.EXPECT().
+					Infow("InvoiceService.CreateInvoice", "input", gomock.Any()).
+					AnyTimes()
 
 				deps.bankGateway.EXPECT().
 					CreateInvoice(gomock.Any(), invoice).
@@ -110,18 +116,26 @@ func TestInvoiceService_CreateInvoice(t *testing.T) {
 				},
 			}
 
+			logger := mocks.NewMockLogger(ctrl)
+
 			setup := tt.setup(
 				ctrl,
 				context.Background(),
 				deps{
-					logger:      mocks.NewMockLogger(ctrl),
+					logger:      logger,
 					bankGateway: mocks.NewMockBankGateway(ctrl),
 				},
 				invoice,
 			)
 
+			appDependencies := application.Dependencies{
+				Config: &config.Config{},
+				Clock:  clock.Clock{},
+				Logger: logger,
+			}
+
 			s := InvoiceService{
-				logger:      setup.deps.logger,
+				app:         application.New(appDependencies),
 				bankGateway: setup.deps.bankGateway,
 			}
 

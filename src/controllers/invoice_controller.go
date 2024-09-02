@@ -2,8 +2,7 @@ package controllers
 
 import (
 	"context"
-	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
-	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/application"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 )
@@ -15,7 +14,7 @@ type InvoiceController struct {
 }
 
 type InvoiceControllerDependencies struct {
-	app.Dependencies
+	application.Dependencies
 	InvoiceService  interfaces.InvoiceService  `name:"InvoiceService"`
 	TransferService interfaces.TransferService `name:"TransferService"`
 }
@@ -31,20 +30,4 @@ func NewInvoiceController(deps InvoiceControllerDependencies) *InvoiceController
 func (i *InvoiceController) CreateInvoice(ctx context.Context, input dtos.CreateInvoiceInput) (output dtos.CreateInvoiceOutput, err error) {
 	i.logger.Infow("InvoiceController.CreateInvoice", "input", input)
 	return i.invoiceService.CreateInvoice(ctx, input)
-}
-
-func (i *InvoiceController) InvoiceHookProcess(ctx context.Context, input dtos.InvoiceHookProcessInput) (output dtos.InvoiceHookProcessOutput, err error) {
-	i.logger.Infow("InvoiceController.InvoiceHookProcess", "input", input)
-
-	if input.Event.Type == domain.InvoiceEventCredited {
-		transferInput := dtos.CreateTransferFromInvoiceInput{Data: input.Event.Log.Invoice}
-
-		_, err = i.transferService.CreateTransferFromInvoice(ctx, transferInput)
-		if err != nil {
-			i.logger.Errorw("Failed to CreateTransferFromInvoice", "error", err)
-			return
-		}
-	}
-
-	return
 }

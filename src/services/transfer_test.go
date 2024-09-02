@@ -7,8 +7,11 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang/mock/gomock"
 	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/application"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/clock"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
+	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -82,6 +85,7 @@ func TestTransferService_calculateTransferAmount(t *testing.T) {
 
 func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 	type deps struct {
+		app            interfaces.Application
 		logger         *mocks.MockLogger
 		bankGateway    *mocks.MockBankGateway
 		transferConfig config.Transfer
@@ -110,9 +114,9 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 		{
 			name: "should fail when invoice status is not paid",
 			setup: func(ctrl *gomock.Controller, ctx context.Context, deps deps, invoice domain.Invoice) setup {
-				invoice.Status = domain.InvoiceStatusCreated
+				invoice.Status = "created"
 
-				deps.logger.EXPECT().Infow(gomock.Any(), gomock.Any()).Times(1)
+				deps.logger.EXPECT().Infow(gomock.Any(), gomock.Any()).AnyTimes()
 				deps.logger.EXPECT().Errorw(gomock.Any(), gomock.Any()).Times(1)
 
 				return setup{
@@ -128,16 +132,11 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 		{
 			name: "should fail when bank gateway returns error",
 			setup: func(ctrl *gomock.Controller, ctx context.Context, deps deps, invoice domain.Invoice) setup {
-				invoice.Status = domain.InvoiceStatusPaid
+				invoice.Status = "paid"
 				invoice.NominalAmount = 10000
 				invoice.DiscountAmount = 0
 				invoice.Fee = 0
-				invoice.ExternalId = "fake-external-id"
 				invoice.DisplayDescription = "Fake invoice description"
-
-				deps.logger.EXPECT().
-					Infow(gomock.Any(), gomock.Any()).
-					AnyTimes()
 
 				deps.bankGateway.EXPECT().
 					CreateTransfer(gomock.Any(), dtos.CreateTransferInput{Data: []domain.Transfer{
@@ -150,15 +149,16 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 							AccountNumber: deps.transferConfig.BankAccount.AccountNumber,
 							AccountType:   deps.transferConfig.BankAccount.AccountType,
 							Tags: []string{
-								fmt.Sprintf("urn:invoice:%s", invoice.ExternalId),
+								fmt.Sprintf("invoice:%s", invoice.Id),
 							},
-							Description: fmt.Sprintf("Payment for invoice #%s - %s", invoice.ExternalId, invoice.DisplayDescription),
+							Description: fmt.Sprintf("Payment for invoice #%s - %s", invoice.Id, invoice.DisplayDescription),
 						},
 					}}).
 					Times(1).
 					Return(dtos.CreateTransferOutput{}, assert.AnError)
 
-				deps.logger.EXPECT().Errorw(gomock.Any(), gomock.Any()).AnyTimes()
+				deps.logger.EXPECT().Infow(gomock.Any(), gomock.Any()).AnyTimes()
+				deps.logger.EXPECT().Errorw(gomock.Any(), gomock.Any()).Times(1)
 
 				return setup{
 					deps: deps,
@@ -173,16 +173,13 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 		{
 			name: "should success when bank gateway returns success",
 			setup: func(ctrl *gomock.Controller, ctx context.Context, deps deps, invoice domain.Invoice) setup {
-				invoice.Status = domain.InvoiceStatusPaid
+				invoice.Status = "paid"
 				invoice.NominalAmount = 10000
 				invoice.DiscountAmount = 0
 				invoice.Fee = 0
-				invoice.ExternalId = "fake-external-id"
 				invoice.DisplayDescription = "Fake invoice description"
 
-				deps.logger.EXPECT().
-					Infow(gomock.Any(), gomock.Any()).
-					AnyTimes()
+				deps.logger.EXPECT().Infow(gomock.Any(), gomock.Any()).AnyTimes()
 
 				deps.bankGateway.EXPECT().
 					CreateTransfer(gomock.Any(), dtos.CreateTransferInput{Data: []domain.Transfer{
@@ -195,9 +192,9 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 							AccountNumber: deps.transferConfig.BankAccount.AccountNumber,
 							AccountType:   deps.transferConfig.BankAccount.AccountType,
 							Tags: []string{
-								fmt.Sprintf("urn:invoice:%s", invoice.ExternalId),
+								fmt.Sprintf("invoice:%s", invoice.Id),
 							},
-							Description: fmt.Sprintf("Payment for invoice #%s - %s", invoice.ExternalId, invoice.DisplayDescription),
+							Description: fmt.Sprintf("Payment for invoice #%s - %s", invoice.Id, invoice.DisplayDescription),
 						},
 					}}).
 					Times(1).
@@ -220,13 +217,20 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
-			invoice := domain.Invoice{}
+			logger := mocks.NewMockLogger(ctrl)
+
+			appDependencies := application.Dependencies{
+				Config: &config.Config{},
+				Clock:  clock.Clock{},
+				Logger: logger,
+			}
 
 			setup := tt.setup(
 				ctrl,
 				context.Background(),
 				deps{
-					logger:      mocks.NewMockLogger(ctrl),
+					logger:      logger,
+					app:         application.New(appDependencies),
 					bankGateway: mocks.NewMockBankGateway(ctrl),
 					transferConfig: config.Transfer{
 						BankAccount: config.BankAccount{
@@ -239,11 +243,11 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 						},
 					},
 				},
-				invoice,
+				domain.Invoice{},
 			)
 
 			s := TransferService{
-				logger:         setup.deps.logger,
+				app:            setup.deps.app,
 				bankGateway:    setup.deps.bankGateway,
 				transferConfig: setup.deps.transferConfig,
 			}

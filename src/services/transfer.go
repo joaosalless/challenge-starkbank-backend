@@ -5,36 +5,39 @@ import (
 	"errors"
 	"fmt"
 	"github.com/joaosalless/challenge-starkbank-backend/config"
-	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 )
 
 type TransferService struct {
-	logger         interfaces.Logger
+	app            interfaces.Application
 	bankGateway    interfaces.BankGateway
 	transferConfig config.Transfer
 }
 
 type TransferServiceDependencies struct {
-	app.Dependencies
+	ioc.In
+	Config      *config.Config         `name:"Config"`
+	Application interfaces.Application `name:"Application"`
 	BankGateway interfaces.BankGateway `name:"BankGateway"`
 }
 
 func NewTransferService(deps TransferServiceDependencies) *TransferService {
 	return &TransferService{
-		logger:         deps.Logger,
+		app:            deps.Application,
 		bankGateway:    deps.BankGateway,
 		transferConfig: deps.Config.Transfer,
 	}
 }
 
 func (i TransferService) CreateTransfer(ctx context.Context, input dtos.CreateTransferInput) (output dtos.CreateTransferOutput, err error) {
-	i.logger.Infow("TransferService.CreateTransfer", "input", input)
+	i.app.Logger().Infow("TransferService.CreateTransfer", "input", input)
 
 	output, err = i.bankGateway.CreateTransfer(ctx, input)
 	if err != nil {
+		i.app.Logger().Errorw("failed to call bankGateway.CreateTransfer", "input", input)
 		return dtos.CreateTransferOutput{}, fmt.Errorf("error when call bankGateway.CreateTransfer: %w", err)
 	}
 
@@ -42,10 +45,10 @@ func (i TransferService) CreateTransfer(ctx context.Context, input dtos.CreateTr
 }
 
 func (i TransferService) CreateTransferFromInvoice(ctx context.Context, input dtos.CreateTransferFromInvoiceInput) (output dtos.CreateTransferOutput, err error) {
-	i.logger.Infow("TransferService.CreateTransferFromInvoice", "input", input)
+	i.app.Logger().Infow("TransferService.CreateTransferFromInvoice", "input", input)
 
 	if input.Data.Status != domain.InvoiceStatusPaid {
-		i.logger.Errorw("invalid invoice status", "input", input)
+		i.app.Logger().Errorw("invalid invoice status", "input", input)
 		return output, errors.New("invalid invoice status")
 	}
 
@@ -58,9 +61,9 @@ func (i TransferService) CreateTransferFromInvoice(ctx context.Context, input dt
 		AccountNumber: i.transferConfig.BankAccount.AccountNumber,
 		AccountType:   i.transferConfig.BankAccount.AccountType,
 		Tags: []string{
-			fmt.Sprintf("urn:invoice:%s", input.Data.ExternalId),
+			fmt.Sprintf("invoice:%s", input.Data.Id),
 		},
-		Description: fmt.Sprintf("Payment for invoice #%s - %s", input.Data.ExternalId, input.Data.DisplayDescription),
+		Description: fmt.Sprintf("Payment for invoice #%s - %s", input.Data.Id, input.Data.DisplayDescription),
 	}
 
 	return i.CreateTransfer(ctx, dtos.CreateTransferInput{Data: []domain.Transfer{transfer}})

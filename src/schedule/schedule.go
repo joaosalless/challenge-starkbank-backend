@@ -2,25 +2,28 @@ package schedule
 
 import (
 	"fmt"
-	"github.com/joaosalless/challenge-starkbank-backend/pkg/app"
+	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"github.com/robfig/cron/v3"
 	"log"
 )
 
 type ScheduledTasks struct {
-	logger interfaces.Logger
-	tasks  []interfaces.ScheduledTask
+	app   interfaces.Application
+	tasks []interfaces.ScheduledTask
 }
 
 type ScheduledTasksDependencies struct {
-	app.Dependencies
+	ioc.In
+	Config                     *config.Config           `name:"Config"`
+	Application                interfaces.Application   `name:"Application"`
 	InvoiceCreateScheduledTask interfaces.ScheduledTask `name:"InvoiceCreateScheduledTask"`
 }
 
 func NewScheduledTasks(deps ScheduledTasksDependencies) *ScheduledTasks {
 	if !deps.Config.Scheduler.Enabled {
-		deps.Logger.Infow("Scheduler is disabled")
+		log.Println("Scheduled tasks are disabled")
 		return &ScheduledTasks{}
 	}
 
@@ -56,7 +59,7 @@ func (s ScheduledTasks) schedule(task interfaces.ScheduledTask) {
 	})
 
 	if err != nil {
-		s.logger.Errorw(fmt.Sprintf("Failed to schedule task: %s", task.ScheduleName()), err)
+		s.app.Logger().Errorw(fmt.Sprintf("Failed to schedule task: %s", task.ScheduleName()), err)
 		panic(err)
 	}
 

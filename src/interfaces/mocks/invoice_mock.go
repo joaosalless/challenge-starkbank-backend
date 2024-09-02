@@ -48,18 +48,6 @@ func (mr *MockInvoiceHandlerMockRecorder) CreateInvoice(ctx interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateInvoice", reflect.TypeOf((*MockInvoiceHandler)(nil).CreateInvoice), ctx)
 }
 
-// HookProcessInvoice mocks base method.
-func (m *MockInvoiceHandler) HookProcessInvoice(ctx *gin.Context) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "HookProcessInvoice", ctx)
-}
-
-// HookProcessInvoice indicates an expected call of HookProcessInvoice.
-func (mr *MockInvoiceHandlerMockRecorder) HookProcessInvoice(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HookProcessInvoice", reflect.TypeOf((*MockInvoiceHandler)(nil).HookProcessInvoice), ctx)
-}
-
 // MockInvoiceController is a mock of InvoiceController interface.
 type MockInvoiceController struct {
 	ctrl     *gomock.Controller
@@ -96,21 +84,6 @@ func (m *MockInvoiceController) CreateInvoice(ctx context.Context, input dtos.Cr
 func (mr *MockInvoiceControllerMockRecorder) CreateInvoice(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateInvoice", reflect.TypeOf((*MockInvoiceController)(nil).CreateInvoice), ctx, input)
-}
-
-// InvoiceHookProcess mocks base method.
-func (m *MockInvoiceController) InvoiceHookProcess(ctx context.Context, input dtos.InvoiceHookProcessInput) (dtos.InvoiceHookProcessOutput, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "InvoiceHookProcess", ctx, input)
-	ret0, _ := ret[0].(dtos.InvoiceHookProcessOutput)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// InvoiceHookProcess indicates an expected call of InvoiceHookProcess.
-func (mr *MockInvoiceControllerMockRecorder) InvoiceHookProcess(ctx, input interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InvoiceHookProcess", reflect.TypeOf((*MockInvoiceController)(nil).InvoiceHookProcess), ctx, input)
 }
 
 // MockInvoiceService is a mock of InvoiceService interface.

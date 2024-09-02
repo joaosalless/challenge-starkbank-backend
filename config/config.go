@@ -44,10 +44,11 @@ type BankProvider struct {
 }
 
 type Starkbank struct {
-	ProjectId   string
-	PublicKey   string
-	PrivateKey  string
-	Environment string
+	ProjectId              string
+	PublicKey              string
+	PrivateKey             string
+	Environment            string
+	DigitalSignatureHeader string
 }
 
 type Invoice struct {
@@ -102,10 +103,11 @@ func LoadConfig() *Config {
 		},
 		BankProvider: BankProvider{
 			Starkbank: Starkbank{
-				ProjectId:   getEnv("STARKBANK_PROJECT_ID", ""),
-				PublicKey:   getEnv("STARKBANK_PUBLIC_KEY", ""),
-				PrivateKey:  getEnv("STARKBANK_PRIVATE_KEY", ""),
-				Environment: getEnv("STARKBANK_ENVIRONMENT", ""),
+				ProjectId:              getEnv("STARKBANK_PROJECT_ID", ""),
+				PublicKey:              getEnv("STARKBANK_PUBLIC_KEY", ""),
+				PrivateKey:             getEnv("STARKBANK_PRIVATE_KEY", ""),
+				Environment:            getEnv("STARKBANK_ENVIRONMENT", ""),
+				DigitalSignatureHeader: getEnv("STARKBANK_DIGITAL_SIGNATURE_HEADER", "Digital-Signature"),
 			},
 		},
 		Scheduler: Scheduler{

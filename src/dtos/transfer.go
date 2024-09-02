@@ -1,6 +1,8 @@
 package dtos
 
-import "github.com/joaosalless/challenge-starkbank-backend/src/domain"
+import (
+	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
+)
 
 type CreateTransferInput struct {
 	Data []domain.Transfer `json:",omitempty"`
