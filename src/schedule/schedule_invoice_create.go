@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/joaosalless/challenge-starkbank-backend/pkg/application"
+	"github.com/joaosalless/challenge-starkbank-backend/config"
+	"github.com/joaosalless/challenge-starkbank-backend/pkg/ioc"
 	"github.com/joaosalless/challenge-starkbank-backend/src/domain"
 	"github.com/joaosalless/challenge-starkbank-backend/src/dtos"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
@@ -14,31 +15,33 @@ import (
 
 type InvoiceCreateScheduledTask struct {
 	scheduledTime     string
-	logger            interfaces.Logger
+	app               interfaces.Application
 	invoiceController interfaces.InvoiceController
 }
 
 type InvoiceCreateScheduledTaskDependencies struct {
-	application.Dependencies
+	ioc.In
+	Config            *config.Config               `name:"Config"`
+	Application       interfaces.Application       `name:"Application"`
 	InvoiceController interfaces.InvoiceController `name:"InvoiceController"`
 }
 
 func NewInvoiceCreateScheduledTask(deps InvoiceCreateScheduledTaskDependencies) *InvoiceCreateScheduledTask {
 	return &InvoiceCreateScheduledTask{
-		logger:            deps.Logger,
+		app:               deps.Application,
 		scheduledTime:     deps.Config.Scheduler.InvoiceCreateScheduledTime,
 		invoiceController: deps.InvoiceController,
 	}
 }
 
 func (ic *InvoiceCreateScheduledTask) Schedule() error {
-	ic.logger.Infow("initializing invoice schedule", "scheduledTime", ic.scheduledTime)
+	ic.app.Logger().Infow("initializing invoice schedule", "scheduledTime", ic.scheduledTime)
 
 	return nil
 }
 
 func (ic *InvoiceCreateScheduledTask) Run() (err error) {
-	ic.logger.Infow("starting InvoiceCreateScheduledTask", "scheduledTime", ic.scheduledTime)
+	ic.app.Logger().Infow("starting InvoiceCreateScheduledTask", "scheduledTime", ic.scheduledTime)
 
 	var invoices []domain.Invoice
 
@@ -56,11 +59,11 @@ func (ic *InvoiceCreateScheduledTask) Run() (err error) {
 		})
 	}
 
-	ic.logger.Infow("finished InvoiceCreateScheduledTask", "invoices", invoices)
+	ic.app.Logger().Infow("finished InvoiceCreateScheduledTask", "invoices", invoices)
 
 	_, err = ic.invoiceController.CreateInvoice(context.Background(), dtos.CreateInvoiceInput{Data: invoices})
 	if err != nil {
-		ic.logger.Errorw("error creating invoices", "error", err)
+		ic.app.Logger().Errorw("error creating invoices", "error", err)
 		return err
 	}
 
