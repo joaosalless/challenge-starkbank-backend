@@ -8,7 +8,7 @@ import (
 	"github.com/joaosalless/challenge-starkbank-backend/pkg/logging"
 	"github.com/joaosalless/challenge-starkbank-backend/src/api/http/handlers"
 	"github.com/joaosalless/challenge-starkbank-backend/src/controllers"
-	"github.com/joaosalless/challenge-starkbank-backend/src/gateways/bank"
+	"github.com/joaosalless/challenge-starkbank-backend/src/integrations/banks"
 	"github.com/joaosalless/challenge-starkbank-backend/src/interfaces"
 	"github.com/joaosalless/challenge-starkbank-backend/src/schedule"
 	"github.com/joaosalless/challenge-starkbank-backend/src/services"
@@ -38,7 +38,7 @@ func Initialize() *dig.Container {
 			Name:        "Application",
 		},
 		{
-			Constructor: bank.NewBankGateway,
+			Constructor: banks.NewBankGateway,
 			Interface:   new(interfaces.BankGateway),
 			Name:        "BankGateway",
 		},

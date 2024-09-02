@@ -1,4 +1,4 @@
-package bank
+package banks
 
 import (
 	"context"
@@ -23,13 +23,13 @@ type BankGateway struct {
 	user interfaces.BankGatewayUser
 }
 
-type Dependencies struct {
+type BankGatewayDependencies struct {
 	ioc.In
 	Config      *config.Config         `name:"Config"`
 	Application interfaces.Application `name:"Application"`
 }
 
-func NewBankGateway(deps Dependencies) *BankGateway {
+func NewBankGateway(deps BankGatewayDependencies) *BankGateway {
 	return &BankGateway{
 		app: deps.Application,
 		user: project.Project{

@@ -130,7 +130,7 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 			},
 		},
 		{
-			name: "should fail when bank gateway returns error",
+			name: "should fail when banks gateway returns error",
 			setup: func(ctrl *gomock.Controller, ctx context.Context, deps deps, invoice domain.Invoice) setup {
 				invoice.Status = "paid"
 				invoice.NominalAmount = 10000
@@ -171,7 +171,7 @@ func TestTransferService_CreateTransferFromInvoice(t *testing.T) {
 			},
 		},
 		{
-			name: "should success when bank gateway returns success",
+			name: "should success when banks gateway returns success",
 			setup: func(ctrl *gomock.Controller, ctx context.Context, deps deps, invoice domain.Invoice) setup {
 				invoice.Status = "paid"
 				invoice.NominalAmount = 10000

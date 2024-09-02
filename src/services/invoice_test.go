@@ -72,7 +72,7 @@ func TestInvoiceService_CreateInvoice(t *testing.T) {
 			},
 		},
 		{
-			name: "should fail when bank gateway returns error",
+			name: "should fail when banks gateway returns error",
 			setup: func(ctrl *gomock.Controller, ctx context.Context, deps deps, invoice dtos.CreateInvoiceInput) setup {
 				deps.logger.EXPECT().
 					Infow("InvoiceService.CreateInvoice", "input", gomock.Any()).
