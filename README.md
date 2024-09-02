@@ -9,8 +9,8 @@ Este repositório contém a implementação do desafio proposto pela StarkBank p
 - [x] Cálculo do valor a ser transferido com base nas informações da invoice.
 - [x] Transferência do valor para a conta configurada, após o pagamento da invoice.
 - [x] Implementação das camadas:
-  - [x] Domain (abstração de modelos de dados para evitar acoplamento com modelos de dados externos)
-  - [x] Schedules (agendador de tarefas de criação de invoices)
+  - [x] Domain (abstração de modelos de dados para evitar acoplamento com modelos de dados externos em camadas intermediárias entre domain e integrations/banks)
+  - [x] Schedule (agendador de tarefas de criação de invoices)
   - [x] API
     - [x] Handlers
       - [x] Controllers
